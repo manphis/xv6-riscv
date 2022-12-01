@@ -169,6 +169,7 @@ freeproc(struct proc *p)
   p->killed = 0;
   p->xstate = 0;
   p->state = UNUSED;
+  p->tracenum = 0;
 }
 
 // Create a user page table for a given process, with no user memory,
@@ -302,8 +303,6 @@ fork(void)
   // Cause fork to return 0 in the child.
   np->trapframe->a0 = 0;
 
-  np->tracenum = p->tracenum; // copy traced syscalls
-
   // increment reference counts on open file descriptors.
   for(i = 0; i < NOFILE; i++)
     if(p->ofile[i])
@@ -322,6 +321,7 @@ fork(void)
 
   acquire(&np->lock);
   np->state = RUNNABLE;
+  np->tracenum = p->tracenum; // copy traced syscalls
   release(&np->lock);
 
   return pid;
