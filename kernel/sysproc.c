@@ -100,7 +100,7 @@ uint64 sys_trace(void) {
   return 0;
 }
 
-uint64 sys_info(void) {
+uint64 sys_sysinfo(void) {
   
   return 0;
 }
