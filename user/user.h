@@ -26,6 +26,12 @@ int uptime(void);
 int trace(int);
 int sysinfo(struct sysinfo *);
 
+int pgaccess(void *base, int len, void *mask);
+// usyscall region
+int ugetpid(void);
+
+
+
 // ulib.c
 int stat(const char*, struct stat*);
 char* strcpy(char*, const char*);

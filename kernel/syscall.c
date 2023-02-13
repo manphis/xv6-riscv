@@ -103,6 +103,7 @@ extern uint64 sys_mkdir(void);
 extern uint64 sys_close(void);
 extern uint64 sys_trace(void);
 extern uint64 sys_sysinfo(void);
+extern uint64 sys_pgaccess(void);
 
 static char *syscallnames[] = {
 [SYS_fork]    "fork",
@@ -128,6 +129,7 @@ static char *syscallnames[] = {
 [SYS_close]   "close",
 [SYS_trace]   "trace",
 [SYS_sysinfo] "info",
+[SYS_pgaccess] "pgaccess",
 };
 
 // An array mapping syscall numbers from syscall.h
@@ -156,6 +158,7 @@ static uint64 (*syscalls[])(void) = {
 [SYS_close]   sys_close,
 [SYS_trace]   sys_trace,
 [SYS_sysinfo] sys_sysinfo,
+[SYS_pgaccess] sys_pgaccess,
 };
 
 void

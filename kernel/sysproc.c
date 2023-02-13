@@ -116,3 +116,41 @@ uint64 sys_sysinfo(void) {
 
   return 0;
 }
+
+uint64 sys_pgaccess(void) {
+  uint64 usrpge_ptr;//待检测页表起始指针
+  int npage;//待检测页表个数
+  uint64 useraddr;//稍后写入用户内存
+  int i;
+  int res = 0;
+
+  pte_t *pte_addr;
+  pte_t pte;
+
+  argaddr(0, &usrpge_ptr);
+  argint(1, &npage);
+  argaddr(2, &useraddr);
+  if (npage > 64) {
+    return -1;
+  }
+
+  pagetable_t pgtable = myproc()->pagetable;
+
+  for (i = 0; i < npage; i++) {
+    pte_addr = walk(pgtable, usrpge_ptr, 0);
+    pte = (*pte_addr);
+
+    if (pte & PTE_A) {
+      res = res | (1<<i);
+      (*pte_addr) = pte & (~PTE_A);
+    }
+
+    usrpge_ptr += PGSIZE;
+  }
+
+  if(copyout(pgtable, useraddr, (char *)&res, sizeof(res)) < 0) {
+    return -1;
+  }
+
+  return 0;
+}
